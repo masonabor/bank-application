@@ -1,0 +1,36 @@
+services:
+  bank-application:
+    container_name: bank-application
+    build: .
+    ports:
+      - '10200:10200'
+    environment:
+      - ORACLE_HOST=${ORACLE_HOST}
+      - ORACLE_PORT=${ORACLE_PORT}
+      - ORACLE_DB=${ORACLE_DB}
+      - ORACLE_USER=${ORACLE_USER}
+      - ORACLE_PASSWORD=${ORACLE_PASSWORD}
+    depends_on:
+      oracle-bank-db:
+        condition: service_healthy
+
+
+  oracle-bank-db:
+    container_name: oracle-bank-db
+    image: 'gvenzl/oracle-free:latest'
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    tty: true
+    restart: always
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      - ORACLE_PASSWORD=${ORACLE_ADMIN_PASSWORD}
+      - ORACLE_ALLOW_REMOTE=true
+      - APP_USER=${ORACLE_USER}
+      - APP_USER_PASSWORD=${ORACLE_PASSWORD}
+    ports:
+      - '1522:1521'
