@@ -1,9 +1,12 @@
-package com.edu.bankaplication.domain.user;
+package com.edu.bankaplication.user.persistance.entity;
 
-import com.edu.bankaplication.domain.account.Account;
+import com.edu.bankaplication.account.persistence.entity.Account;
+import com.edu.bankaplication.user.shared.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -19,6 +22,7 @@ import java.util.Set;
         name = "users",
         schema = "bank"
 )
+@SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
 public class User {
 
     @Id
@@ -51,7 +55,7 @@ public class User {
     private AddressInfo addressInfo;
 
     @OneToMany(
-            mappedBy = "id",
+            mappedBy = "user",
             cascade = CascadeType.ALL, //
             fetch = FetchType.LAZY
     )

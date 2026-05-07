@@ -1,9 +1,11 @@
-package com.edu.bankaplication.domain.account;
+package com.edu.bankaplication.account.persistence.entity;
 
-import com.edu.bankaplication.domain.user.User;
+import com.edu.bankaplication.user.persistance.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
@@ -15,11 +17,13 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(
         name = "accounts",
         schema = "bank"
 )
+@SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
 public class Account {
 
     @Id
@@ -43,7 +47,7 @@ public class Account {
     private User user;
 
     @OneToMany(
-            mappedBy = "id",
+            mappedBy = "account",
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )

@@ -1,11 +1,19 @@
-package com.edu.bankaplication.domain.transaction;
+package com.edu.bankaplication.transaction.persistence.entity;
 
+import com.edu.bankaplication.account.persistence.entity.Posting;
+import com.edu.bankaplication.transaction.shared.enums.TransactionStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -16,6 +24,7 @@ import java.time.LocalDateTime;
         name = "transactions",
         schema = "bank"
 )
+@SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
 public class Transaction {
 
     @Id
@@ -31,8 +40,14 @@ public class Transaction {
     @Column(name = "amount", nullable = false, updatable = false)
     private BigDecimal amount;
 
+    @Column(name = "transaction_status", nullable = false)
+    private TransactionStatus status;
+
     @Column(name = "transaction_comment", updatable = false)
     private String comment;
+
+    @OneToMany(mappedBy = "transaction",  fetch = FetchType.LAZY)
+    private Set<Posting> postings;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -1,4 +1,4 @@
-package com.edu.bankaplication.domain.user;
+package com.edu.bankaplication.user.persistance.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

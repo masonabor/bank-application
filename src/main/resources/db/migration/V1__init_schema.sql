@@ -10,6 +10,7 @@ CREATE SEQUENCE bank.users_seq START WITH 1 INCREMENT BY 50;
 
 CREATE TABLE bank.accounts
 (
+    deleted_at  NUMBER(1)     NOT NULL,
     id          NUMBER(38, 0) NOT NULL,
     card_number VARCHAR2(255) NOT NULL,
     balance     DECIMAL       NOT NULL,
@@ -35,6 +36,7 @@ CREATE TABLE bank.address_infos
 
 CREATE TABLE bank.postings
 (
+    deleted_at     NUMBER(1)     NOT NULL,
     id             NUMBER(38, 0) NOT NULL,
     account_id     NUMBER(38, 0) NOT NULL,
     type           NUMBER(5),
@@ -47,17 +49,19 @@ CREATE TABLE bank.postings
 
 CREATE TABLE bank.transactions
 (
-    id         NUMBER(38, 0) NOT NULL,
-    from_number       VARCHAR2(255) NOT NULL,
-    to_number         VARCHAR2(255) NOT NULL,
-    amount     DECIMAL       NOT NULL,
-    transaction_comment    VARCHAR2(255),
-    created_at TIMESTAMP,
+    deleted_at          NUMBER(1)     NOT NULL,
+    id                  NUMBER(38, 0) NOT NULL,
+    from_number         VARCHAR2(255) NOT NULL,
+    to_number           VARCHAR2(255) NOT NULL,
+    amount              DECIMAL       NOT NULL,
+    transaction_comment VARCHAR2(255),
+    created_at          TIMESTAMP,
     CONSTRAINT pk_transactions PRIMARY KEY (id)
 );
 
 CREATE TABLE bank.users
 (
+    deleted_at               NUMBER(1)     NOT NULL,
     id                       NUMBER(38, 0) NOT NULL,
     first_name               VARCHAR2(255) NOT NULL,
     last_name                VARCHAR2(255) NOT NULL,
@@ -75,9 +79,6 @@ CREATE TABLE bank.users
 
 ALTER TABLE bank.accounts
     ADD CONSTRAINT uc_accounts_card_number UNIQUE (card_number);
-
-ALTER TABLE bank.postings
-    ADD CONSTRAINT uc_postings_transaction UNIQUE (transaction_id);
 
 ALTER TABLE bank.users
     ADD CONSTRAINT uc_users_address_info UNIQUE (address_info_id);
@@ -99,3 +100,5 @@ ALTER TABLE bank.postings
 
 ALTER TABLE bank.users
     ADD CONSTRAINT FK_USERS_ON_ADDRESS_INFO FOREIGN KEY (address_info_id) REFERENCES bank.address_infos (id);
+
+

@@ -1,6 +1,6 @@
-package com.edu.bankaplication.persistence.repository;
+package com.edu.bankaplication.user.persistance;
 
-import com.edu.bankaplication.domain.user.AddressInfo;
+import com.edu.bankaplication.user.persistance.entity.AddressInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AddressInfoRepository extends JpaRepository<AddressInfo, Long> {

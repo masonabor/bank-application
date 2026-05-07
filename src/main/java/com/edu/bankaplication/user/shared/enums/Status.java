@@ -1,4 +1,4 @@
-package com.edu.bankaplication.domain.user;
+package com.edu.bankaplication.user.shared.enums;
 
 public enum Status {
     ACTIVE,

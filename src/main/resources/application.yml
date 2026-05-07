@@ -8,6 +8,8 @@ spring:
     default-schema: bank
     enabled: true
     loggers: slf4j
+  jpa:
+    show-sql: true
 
   datasource:
     url: jdbc:oracle:thin:@//${ORACLE_HOST:localhost}:${ORACLE_PORT:1522}/${ORACLE_DB:FREEPDB1}

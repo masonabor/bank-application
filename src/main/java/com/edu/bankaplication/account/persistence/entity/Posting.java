@@ -1,9 +1,12 @@
-package com.edu.bankaplication.domain.account;
+package com.edu.bankaplication.account.persistence.entity;
 
-import com.edu.bankaplication.domain.transaction.Transaction;
+import com.edu.bankaplication.account.shared.enums.PostingType;
+import com.edu.bankaplication.transaction.persistence.entity.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,11 +16,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(
         name = "postings",
         schema = "bank"
 )
+@SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
 public class Posting {
 
     @Id
@@ -34,10 +39,9 @@ public class Posting {
 
     private String description;
 
-    @OneToOne(
+    @ManyToOne(
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            orphanRemoval = true
+            fetch = FetchType.LAZY
     )
     @JoinColumn(
             name = "transaction_id",
@@ -49,6 +53,4 @@ public class Posting {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    //TODO equals and hashcode for Set collection
 }
