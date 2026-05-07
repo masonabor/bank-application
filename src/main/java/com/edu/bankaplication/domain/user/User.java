@@ -1,5 +1,6 @@
-package com.edu.bankaplication.domain;
+package com.edu.bankaplication.domain.user;
 
+import com.edu.bankaplication.domain.account.Account;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,7 +44,10 @@ public class User {
             cascade = CascadeType.ALL, //
             fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "address_info_id")
+    @JoinColumn(
+            name = "address_info_id",
+            nullable = false
+    )
     private AddressInfo addressInfo;
 
     @OneToMany(
@@ -51,7 +55,7 @@ public class User {
             cascade = CascadeType.ALL, //
             fetch = FetchType.LAZY
     )
-    private Set<BankAccount> bankAccounts;
+    private Set<Account> accounts;
 
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;

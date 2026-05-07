@@ -1,4 +1,4 @@
-package com.edu.bankaplication.domain;
+package com.edu.bankaplication.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "address_info", schema = "bank")
+@Table(name = "address_infos", schema = "bank")
 public class AddressInfo {
 
     @Id

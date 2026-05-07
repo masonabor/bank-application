@@ -1,5 +1,6 @@
-package com.edu.bankaplication.domain;
+package com.edu.bankaplication.domain.account;
 
+import com.edu.bankaplication.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,13 +17,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "bank_accounts",
+        name = "accounts",
         schema = "bank"
 )
-public class BankAccount {
+public class Account {
 
     @Id
-    @Column(name = "bank_account_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -40,6 +41,13 @@ public class BankAccount {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(
+            mappedBy = "id",
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private Set<Posting> postings;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
