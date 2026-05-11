@@ -23,6 +23,7 @@ import java.util.Set;
         name = "accounts",
         schema = "bank"
 )
+//there is a problem with lazy initializing in many-to-one and soft delete annotation, so you need to replace @SoftDelete with @SQLDelete and @Where
 @SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
 public class Account {
 
@@ -42,7 +43,7 @@ public class Account {
     @Builder.Default
     private BigDecimal balance = BigDecimal.ZERO;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

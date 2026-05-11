@@ -1,6 +1,7 @@
 package com.edu.bankaplication.user.persistance.entity;
 
 import com.edu.bankaplication.account.persistence.entity.Account;
+import com.edu.bankaplication.user.shared.enums.Gender;
 import com.edu.bankaplication.user.shared.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,11 +42,14 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @Column(name = "gender", nullable = false)
-    private String gender;
+    private Gender gender;
 
     @OneToOne(
-            cascade = CascadeType.ALL, //
+            cascade = CascadeType.ALL, // check what is cascade types
             fetch = FetchType.LAZY
     )
     @JoinColumn(
@@ -56,7 +60,7 @@ public class User {
 
     @OneToMany(
             mappedBy = "user",
-            cascade = CascadeType.ALL, //
+            cascade = CascadeType.ALL, // check what is cascade types
             fetch = FetchType.LAZY
     )
     private Set<Account> accounts;

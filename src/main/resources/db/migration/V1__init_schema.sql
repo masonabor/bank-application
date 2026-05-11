@@ -67,6 +67,7 @@ CREATE TABLE bank.users
     last_name                VARCHAR2(255) NOT NULL,
     middle_name              VARCHAR2(255) NOT NULL,
     email                    VARCHAR2(255) NOT NULL,
+    password                 VARCHAR2(255) NOT NULL,
     gender                   VARCHAR2(255) NOT NULL,
     address_info_id          NUMBER(38, 0) NOT NULL,
     phone_number             VARCHAR2(255) NOT NULL,

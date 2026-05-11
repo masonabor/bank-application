@@ -44,7 +44,7 @@ public class Transaction {
     private TransactionStatus status;
 
     @Column(name = "transaction_comment", updatable = false)
-    private String comment;
+    private String transactionComment;
 
     @OneToMany(mappedBy = "transaction",  fetch = FetchType.LAZY)
     private Set<Posting> postings;
