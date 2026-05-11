@@ -1,7 +1,7 @@
 package com.edu.bankaplication.account.persistence.entity;
 
 import com.edu.bankaplication.account.shared.enums.PostingType;
-import com.edu.bankaplication.transaction.persistence.entity.Transaction;
+import com.edu.bankaplication.transaction.persistence.entity.Transfer;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +9,7 @@ import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -44,13 +44,13 @@ public class Posting {
             fetch = FetchType.LAZY
     )
     @JoinColumn(
-            name = "transaction_id",
+            name = "transfer_id",
             nullable = false,
             updatable = false
     )
-    private Transaction transaction;
+    private Transfer transfer;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

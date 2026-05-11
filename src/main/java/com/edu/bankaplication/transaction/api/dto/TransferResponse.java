@@ -1,4 +1,5 @@
 package com.edu.bankaplication.transaction.api.dto;
 
-public class TransactionEntry {
-}
+public record TransferResponse(
+
+) {}

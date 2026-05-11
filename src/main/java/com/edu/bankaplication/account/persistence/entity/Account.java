@@ -1,5 +1,8 @@
 package com.edu.bankaplication.account.persistence.entity;
 
+import com.edu.bankaplication.account.core.exception.InsufficientBalanceException;
+import com.edu.bankaplication.account.core.exception.InvalidMoneyAmountException;
+import com.edu.bankaplication.account.shared.enums.Currency;
 import com.edu.bankaplication.user.persistance.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +12,7 @@ import org.hibernate.annotations.SoftDeleteType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 @Getter
@@ -39,6 +42,9 @@ public class Account {
     )
     private String cardNumber;
 
+    @Column(name = "currency", nullable = false, updatable = false)
+    private Currency currency;
+
     @Column(name = "balance", nullable = false)
     @Builder.Default
     private BigDecimal balance = BigDecimal.ZERO;
@@ -55,11 +61,32 @@ public class Account {
     private Set<Posting> postings;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "due_to", nullable = false, updatable = false)
-    private LocalDateTime dueTo;
+    private Instant dueTo;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
+
+    public void withdraw(BigDecimal amount) {
+        requirePositive(amount);
+
+        if (balance.compareTo(amount) < 0)
+            throw new InsufficientBalanceException("Balance cannot be negative");
+
+        balance = balance.subtract(amount);
+
+    }
+
+    public void deposit(BigDecimal amount) {
+        requirePositive(amount);
+        balance = balance.add(amount);
+    }
+
+    private void requirePositive(BigDecimal amount) {
+        if (amount == null || amount.signum() <= 0) {
+            throw new InvalidMoneyAmountException("amount must be positive");
+        }
+    }
 }

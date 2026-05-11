@@ -12,7 +12,7 @@ import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 @Getter
@@ -21,11 +21,11 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "transactions",
+        name = "transfers",
         schema = "bank"
 )
 @SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
-public class Transaction {
+public class Transfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -44,11 +44,11 @@ public class Transaction {
     private TransactionStatus status;
 
     @Column(name = "transaction_comment", updatable = false)
-    private String transactionComment;
+    private String transferComment;
 
     @OneToMany(mappedBy = "transaction",  fetch = FetchType.LAZY)
     private Set<Posting> postings;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }
