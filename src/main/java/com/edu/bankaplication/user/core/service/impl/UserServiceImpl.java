@@ -4,6 +4,7 @@ import com.edu.bankaplication.user.api.dto.CreateUserRequest;
 import com.edu.bankaplication.user.api.dto.UserResponse;
 import com.edu.bankaplication.user.core.service.UserService;
 import com.edu.bankaplication.user.persistance.UserRepository;
+import com.edu.bankaplication.user.shared.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
+    private final UserDtoMapper userDtoMapper;
 
     @Override
     public UserResponse createUser(CreateUserRequest request) {

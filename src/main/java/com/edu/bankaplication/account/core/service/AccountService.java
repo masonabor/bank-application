@@ -9,5 +9,4 @@ public interface AccountService {
     AccountResponse createAccount(CreateAccountRequest request);
     void deleteAccount(Long id);
     boolean checkBalance(Long id, BigDecimal amount);
-
 }

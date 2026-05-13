@@ -1,8 +1,9 @@
 package com.edu.bankaplication.account.persistence.entity;
 
 import com.edu.bankaplication.account.core.exception.InsufficientBalanceException;
-import com.edu.bankaplication.account.core.exception.InvalidMoneyAmountException;
+import com.edu.bankaplication.account.core.exception.InvalidBalanceAmountException;
 import com.edu.bankaplication.account.shared.enums.Currency;
+import com.edu.bankaplication.account.shared.enums.Status;
 import com.edu.bankaplication.user.persistance.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -60,6 +61,9 @@ public class Account {
     )
     private Set<Posting> postings;
 
+    @Column(name = "status", nullable = false)
+    private Status status;
+
     @CreationTimestamp
     private Instant createdAt;
 
@@ -76,7 +80,6 @@ public class Account {
             throw new InsufficientBalanceException("Balance cannot be negative");
 
         balance = balance.subtract(amount);
-
     }
 
     public void deposit(BigDecimal amount) {
@@ -86,7 +89,9 @@ public class Account {
 
     private void requirePositive(BigDecimal amount) {
         if (amount == null || amount.signum() <= 0) {
-            throw new InvalidMoneyAmountException("amount must be positive");
+            throw new InvalidBalanceAmountException("amount must be positive");
         }
     }
+
+
 }

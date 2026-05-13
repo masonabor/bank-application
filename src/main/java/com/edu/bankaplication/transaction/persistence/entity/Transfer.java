@@ -1,12 +1,10 @@
 package com.edu.bankaplication.transaction.persistence.entity;
 
 import com.edu.bankaplication.account.persistence.entity.Posting;
+import com.edu.bankaplication.account.shared.enums.Currency;
 import com.edu.bankaplication.transaction.shared.enums.TransactionStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
@@ -16,6 +14,7 @@ import java.time.Instant;
 import java.util.Set;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +35,9 @@ public class Transfer {
 
     @Column(name = "to_number", nullable = false, updatable = false)
     private String toNumber;
+
+    @Column(name = "currency", nullable = false, updatable = false)
+    private Currency currency;
 
     @Column(name = "amount", nullable = false, updatable = false)
     private BigDecimal amount;

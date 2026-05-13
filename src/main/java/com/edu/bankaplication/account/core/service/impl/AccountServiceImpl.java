@@ -2,6 +2,7 @@ package com.edu.bankaplication.account.core.service.impl;
 
 import com.edu.bankaplication.account.api.dto.AccountResponse;
 import com.edu.bankaplication.account.api.dto.CreateAccountRequest;
+import com.edu.bankaplication.account.core.exception.AccountNotFoundException;
 import com.edu.bankaplication.account.core.exception.BadAccountRequestException;
 import com.edu.bankaplication.account.core.service.AccountService;
 import com.edu.bankaplication.account.persistence.AccountRepository;
@@ -14,6 +15,7 @@ import com.edu.bankaplication.user.persistance.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -29,6 +31,7 @@ public class AccountServiceImpl implements AccountService {
 
     //TODO validation of user, which will own that account or that administrator creates the account for user
     @Override
+    @Transactional
     public AccountResponse createAccount(CreateAccountRequest request) {
         if (request == null) {
             log.error("request is null");
@@ -49,8 +52,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean checkBalance(Long id, BigDecimal amount) {
-        return false;
+    @Transactional(readOnly = true)
+    public boolean checkBalance(Long fromId, BigDecimal amountToWithdraw) {
+        Account fromAccount = accountRepository.findById(fromId)
+                .orElseThrow(() -> new AccountNotFoundException(fromId));
+
+        return fromAccount.getBalance().compareTo(amountToWithdraw) > 0;
     }
 
 
