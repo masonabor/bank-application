@@ -61,6 +61,7 @@ public class Account {
     )
     private Set<Posting> postings;
 
+    // TODO change technical status to business status
     @Column(name = "status", nullable = false)
     private Status status;
 

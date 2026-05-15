@@ -15,7 +15,7 @@ public interface TransferDtoMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "posting", ignore = true)
+    @Mapping(target = "postings", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     Transfer toTransfer(TransferEntry transferEntry);
 

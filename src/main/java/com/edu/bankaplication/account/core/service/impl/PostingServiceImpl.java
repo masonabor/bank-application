@@ -12,6 +12,8 @@ import com.edu.bankaplication.transaction.persistence.TransferRepository;
 import com.edu.bankaplication.transaction.persistence.entity.Transfer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +34,7 @@ public class PostingServiceImpl implements PostingService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Set<PostingResponse> createPostings(Set<PostingEntry> postingEntries, Transfer transfer) {
         if (postingEntries == null || postingEntries.size() != 2)
             throw new EmptyPostingEntryException();

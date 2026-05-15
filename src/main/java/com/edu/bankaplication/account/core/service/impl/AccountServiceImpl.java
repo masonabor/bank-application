@@ -15,6 +15,7 @@ import com.edu.bankaplication.user.persistance.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -31,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
 
     //TODO validation of user, which will own that account or that administrator creates the account for user
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public AccountResponse createAccount(CreateAccountRequest request) {
         if (request == null) {
             log.error("request is null");
