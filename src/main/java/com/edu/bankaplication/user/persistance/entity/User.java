@@ -11,7 +11,6 @@ import org.hibernate.annotations.SoftDeleteType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -54,8 +53,7 @@ public class User {
             fetch = FetchType.LAZY
     )
     @JoinColumn(
-            name = "address_info_id",
-            nullable = false
+            name = "address_info_id"
     )
     private AddressInfo addressInfo;
 
@@ -81,4 +79,7 @@ public class User {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @Version
+    private Long version;
 }

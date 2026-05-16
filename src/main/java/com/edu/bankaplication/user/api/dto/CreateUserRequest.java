@@ -9,6 +9,5 @@ public record CreateUserRequest(
         String email,
         String password,
         Gender gender,
-        String phoneNumber,
-        String alternativePhoneNumber
+        String phoneNumber
 ) {}
