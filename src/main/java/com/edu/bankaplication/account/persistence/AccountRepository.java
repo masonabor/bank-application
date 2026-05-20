@@ -2,6 +2,7 @@ package com.edu.bankaplication.account.persistence;
 
 import com.edu.bankaplication.account.persistence.entity.Account;
 import jakarta.persistence.LockModeType;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<@NonNull Account, @NonNull Long> {
 
     /*
         it is necessary because you need to lock accounts

@@ -1,6 +1,7 @@
-package com.edu.bankaplication.user.persistance.entity;
+package com.edu.bankaplication.user.persistance.entity.customer;
 
 import com.edu.bankaplication.account.persistence.entity.Account;
+import com.edu.bankaplication.user.persistance.entity.IdentityUser;
 import com.edu.bankaplication.user.shared.enums.Gender;
 import com.edu.bankaplication.user.shared.enums.Status;
 import jakarta.persistence.*;
@@ -24,11 +25,18 @@ import java.util.Set;
         schema = "bank"
 )
 @SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
-public class User {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    @OneToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "identity_user_id", nullable = false)
+    private IdentityUser identityUser;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -39,12 +47,6 @@ public class User {
     @Column(name = "middle_name", nullable = false)
     private String middleName;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
@@ -52,23 +54,15 @@ public class User {
             cascade = CascadeType.ALL, // check what is cascade types
             fetch = FetchType.LAZY
     )
-    @JoinColumn(
-            name = "address_info_id"
-    )
+    @JoinColumn(name = "address_info_id")
     private AddressInfo addressInfo;
 
     @OneToMany(
-            mappedBy = "user",
+            mappedBy = "customer",
             cascade = CascadeType.ALL, // check what is cascade types
             fetch = FetchType.LAZY
     )
     private Set<Account> accounts;
-
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
-
-    @Column(name = "alternative_phone_number")
-    private String alternativePhoneNumber;
 
     @Column(name = "status", nullable = false)
     @Builder.Default

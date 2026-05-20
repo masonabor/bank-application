@@ -19,4 +19,8 @@ spring:
     password: ${ORACLE_PASSWORD:bank1234}
     driver-class-name: oracle.jdbc.OracleDriver
 
+token:
+  refresh-token-expire-time: 5000
+  verification-token-expire-time: 1000
+
 

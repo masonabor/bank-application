@@ -6,7 +6,7 @@ import com.edu.bankaplication.user.shared.enums.Status;
 
 import java.util.Set;
 
-public record UserResponse(
+public record CustomerResponse(
         String firstName,
         String lastName,
         String middleName,

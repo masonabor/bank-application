@@ -2,7 +2,7 @@ package com.edu.bankaplication.user.api.dto;
 
 import com.edu.bankaplication.user.shared.enums.Gender;
 
-public record CreateUserRequest(
+public record CreateCustomerRequest(
         String firstName,
         String lastName,
         String middleName,

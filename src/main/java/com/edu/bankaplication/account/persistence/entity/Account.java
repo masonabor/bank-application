@@ -4,7 +4,7 @@ import com.edu.bankaplication.account.core.exception.InsufficientBalanceExceptio
 import com.edu.bankaplication.account.core.exception.InvalidBalanceAmountException;
 import com.edu.bankaplication.account.shared.enums.Currency;
 import com.edu.bankaplication.account.shared.enums.Status;
-import com.edu.bankaplication.user.persistance.entity.User;
+import com.edu.bankaplication.user.persistance.entity.customer.Customer;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -52,7 +52,7 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Customer customer;
 
     @OneToMany(
             mappedBy = "account",

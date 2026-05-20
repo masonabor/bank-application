@@ -9,9 +9,9 @@ import com.edu.bankaplication.account.persistence.AccountRepository;
 import com.edu.bankaplication.account.persistence.entity.Account;
 import com.edu.bankaplication.account.shared.mapper.AccountDtoMapper;
 import com.edu.bankaplication.user.core.exception.UserNotExistsException;
-import com.edu.bankaplication.user.core.service.UserService;
-import com.edu.bankaplication.user.persistance.UserRepository;
-import com.edu.bankaplication.user.persistance.entity.User;
+import com.edu.bankaplication.user.core.service.CustomerService;
+import com.edu.bankaplication.user.persistance.CustomerRepository;
+import com.edu.bankaplication.user.persistance.entity.customer.Customer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,8 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final AccountDtoMapper accountDtoMapper;
-    private final UserService userService;
-    private final UserRepository userRepository;
+    private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
 
     //TODO validation of user, which will own that account or that administrator creates the account for user
     @Override
@@ -39,11 +39,11 @@ public class AccountServiceImpl implements AccountService {
             throw new BadAccountRequestException("Create account request is null");
         }
 
-        User user = userRepository.findById(request.userId())
+        Customer customer = customerRepository.findById(request.userId())
                 .orElseThrow(
                         () -> new UserNotExistsException(request.userId())
                 );
-        Account savedAccount = accountRepository.save(accountDtoMapper.toAccount(request, user));
+        Account savedAccount = accountRepository.save(accountDtoMapper.toAccount(request, customer));
         return accountDtoMapper.toAccountResponse(savedAccount);
     }
 
