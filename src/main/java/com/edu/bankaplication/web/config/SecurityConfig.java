@@ -12,8 +12,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 class SecurityConfig {
 
-    SecurityFilterChain securityFilterChain(HttpSecurity http) {
-
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        http
+                .authorizeHttpRequests(authorizeRequests -> {
+                    authorizeRequests
+                            .requestMatchers("/auth/**").permitAll()
+                            .anyRequest().authenticated();
+                });
         return http.build();
     }
 

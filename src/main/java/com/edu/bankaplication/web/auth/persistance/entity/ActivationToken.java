@@ -3,11 +3,9 @@ package com.edu.bankaplication.web.auth.persistance.entity;
 import com.edu.bankaplication.user.persistance.entity.IdentityUser;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.common.TemporalUnit;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -16,16 +14,16 @@ import java.time.Instant;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "verification_tokens",
+        name = "activation_tokens",
         schema = "bank",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {
                         "user_id",
-                        "verification_token_hash"
+                        "activation_token_hash"
                 })
         }
 )
-public class VerificationToken implements Token<String>{
+public class ActivationToken implements Token<String>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,17 +38,22 @@ public class VerificationToken implements Token<String>{
     private IdentityUser user;
 
     @Column(
-            name = "verification_token_hash",
+            name = "activation_token_hash",
             nullable = false,
             updatable = false
     )
-    private String verificationTokenHash;
+    private String activationTokenHash;
 
     @Column(name = "expires_at", nullable = false, updatable = false)
     private Instant expiresAt;
 
     @Override
     public String getTokenHash() {
-        return verificationTokenHash;
+        return activationTokenHash;
+    }
+
+    public boolean isExpired() {
+        Objects.requireNonNull(expiresAt, "expires at is null");
+        return Instant.now().isBefore(expiresAt);
     }
 }

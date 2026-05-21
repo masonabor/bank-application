@@ -18,7 +18,10 @@ import java.time.Instant;
 @Entity
 @Table(
         name = "identity_users",
-        schema = "bank"
+        schema = "bank",
+        indexes = {
+                @Index(name = "idx_identity_users_email", columnList = "email")
+        }
 )
 @SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP)
 public class IdentityUser {

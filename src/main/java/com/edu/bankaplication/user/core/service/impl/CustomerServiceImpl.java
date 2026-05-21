@@ -2,6 +2,7 @@ package com.edu.bankaplication.user.core.service.impl;
 
 import com.edu.bankaplication.user.api.dto.CreateCustomerRequest;
 import com.edu.bankaplication.user.api.dto.CustomerResponse;
+import com.edu.bankaplication.user.api.dto.RegisterCustomerRequest;
 import com.edu.bankaplication.user.core.exception.EmptyCreateUserRequestException;
 import com.edu.bankaplication.user.core.service.CustomerService;
 import com.edu.bankaplication.user.persistance.CustomerRepository;
@@ -27,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public CustomerResponse createUser(CreateCustomerRequest request) {
+    public CustomerResponse createCustomer(RegisterCustomerRequest request) {
         if (request == null)
             throw new EmptyCreateUserRequestException();
 
@@ -40,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteCustomer(Long id) {
 
     }
 

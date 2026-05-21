@@ -1,5 +1,14 @@
 package com.edu.bankaplication.internalService.notification.dto;
 
-public record NotificationMessage(
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-) {}
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class NotificationMessage {
+    private final String message;
+}

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -49,5 +50,10 @@ public class RefreshToken implements Token<String> {
     @Override
     public String getTokenHash() {
         return refreshTokenHash;
+    }
+
+    public boolean isExpired() {
+        Objects.requireNonNull(expiresAt, "expires at is null");
+        return Instant.now().isBefore(expiresAt);
     }
 }
