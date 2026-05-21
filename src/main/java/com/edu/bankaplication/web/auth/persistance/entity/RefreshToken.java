@@ -23,6 +23,7 @@ import java.time.Instant;
         }
 )
 public class RefreshToken implements Token<String> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,7 +47,7 @@ public class RefreshToken implements Token<String> {
     private Instant expiresAt;
 
     @Override
-    public String getToken() {
+    public String getTokenHash() {
         return refreshTokenHash;
     }
 }

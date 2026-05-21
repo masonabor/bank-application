@@ -50,7 +50,7 @@ public class VerificationToken implements Token<String>{
     private Instant expiresAt;
 
     @Override
-    public String getToken() {
+    public String getTokenHash() {
         return verificationTokenHash;
     }
 }

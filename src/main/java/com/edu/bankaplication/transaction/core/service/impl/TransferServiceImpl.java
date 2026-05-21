@@ -83,10 +83,8 @@ public class TransferServiceImpl implements TransferService {
                 entry.amount()
         );
 
-
         fromAccount.withdraw(amount);
         toAccount.deposit(amount);
-
 
         transfer.setStatus(TransactionStatus.SUCCESS);
         transferRepository.save(transfer);
