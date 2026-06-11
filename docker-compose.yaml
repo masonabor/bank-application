@@ -14,7 +14,6 @@ services:
       oracle-bank-db:
         condition: service_healthy
 
-
   oracle-bank-db:
     container_name: oracle-bank-db
     image: 'gvenzl/oracle-free:latest'

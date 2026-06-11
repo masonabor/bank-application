@@ -36,4 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 
+### Environment ###
 .env
+
+### RSA keys ###
+/src/main/resources/keys
+
+
+

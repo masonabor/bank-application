@@ -1,0 +1,57 @@
+package com.edu.bankapplication.account.persistence.entity;
+
+import com.edu.bankapplication.account.shared.enums.PostingType;
+import com.edu.bankapplication.transfer.persistence.entity.Transfer;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@Entity
+@Table(
+        name = "postings",
+        schema = "bank"
+)
+@SoftDelete(columnName = "deleted_at", strategy = SoftDeleteType.TIMESTAMP) // create indexes for deleted_at
+public class Posting {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
+    @Enumerated(EnumType.STRING)
+    private PostingType type;
+
+    private BigDecimal amount;
+
+    private String description;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(
+            name = "transfer_id",
+            nullable = false,
+            updatable = false
+    )
+    private Transfer transfer;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+}
