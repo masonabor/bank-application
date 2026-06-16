@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface AccountDtoMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "balance", ignore = true)
     @Mapping(target = "customer", source = "customer")
     @Mapping(target = "postings", ignore = true)

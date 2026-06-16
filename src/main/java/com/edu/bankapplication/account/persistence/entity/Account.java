@@ -47,8 +47,8 @@ public class Account {
     @Column(name = "currency", nullable = false, updatable = false)
     private Currency currency;
 
-    @Column(name = "balance", nullable = false)
     @Builder.Default
+    @Column(name = "balance", nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.EAGER)

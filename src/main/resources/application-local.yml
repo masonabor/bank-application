@@ -8,3 +8,25 @@ spring:
   docker:
     compose:
       enabled: false
+
+  mvc:
+    problemdetails:
+      enabled: false
+
+  web:
+    resources:
+      add-mappings: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: TRACE
+
+server:
+  port: 8090
