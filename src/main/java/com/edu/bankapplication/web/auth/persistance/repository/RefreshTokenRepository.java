@@ -1,5 +1,6 @@
 package com.edu.bankapplication.web.auth.persistance.repository;
 
+import com.edu.bankapplication.user.persistance.entity.IdentityUser;
 import com.edu.bankapplication.web.auth.persistance.entity.RefreshToken;
 import jakarta.persistence.LockModeType;
 import lombok.NonNull;
@@ -30,4 +31,9 @@ public interface RefreshTokenRepository extends JpaRepository<@NonNull RefreshTo
         where rt.refreshTokenHash = :tokenHash
     """)
     void deleteByTokenHash(@Param("tokenHash") String tokenHash);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    void deleteByUser(IdentityUser user);
+
+    boolean existsByUser(IdentityUser user);
 }

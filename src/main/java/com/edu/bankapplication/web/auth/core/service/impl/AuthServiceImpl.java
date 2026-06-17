@@ -6,14 +6,12 @@ import com.edu.bankapplication.user.api.dto.CustomerResponse;
 import com.edu.bankapplication.user.api.dto.EmployeeResponse;
 import com.edu.bankapplication.user.core.exception.UserNotFoundException;
 import com.edu.bankapplication.user.core.exception.UserStatusException;
-import com.edu.bankapplication.user.core.service.EmployeeService;
 import com.edu.bankapplication.user.persistance.CustomerRepository;
 import com.edu.bankapplication.user.persistance.EmployeeRepository;
 import com.edu.bankapplication.user.shared.enums.Role;
 import com.edu.bankapplication.user.shared.mapper.EmployeeDtoMapper;
 import com.edu.bankapplication.web.auth.api.dto.*;
 import com.edu.bankapplication.user.core.exception.EmptyCreateUserRequestException;
-import com.edu.bankapplication.user.core.service.CustomerService;
 import com.edu.bankapplication.user.persistance.IdentityUserRepository;
 import com.edu.bankapplication.user.persistance.entity.IdentityUser;
 import com.edu.bankapplication.user.shared.enums.Status;
@@ -22,12 +20,11 @@ import com.edu.bankapplication.user.shared.mapper.IdentityUserDtoMapper;
 import com.edu.bankapplication.web.auth.core.exception.*;
 import com.edu.bankapplication.web.auth.core.service.AuthService;
 import com.edu.bankapplication.web.auth.core.service.JwtService;
+import com.edu.bankapplication.web.auth.core.service.RefreshTokenService;
 import com.edu.bankapplication.web.auth.core.service.factory.TokenFactory;
 import com.edu.bankapplication.web.auth.core.service.factory.TokenResult;
-import com.edu.bankapplication.web.auth.persistance.entity.RefreshToken;
 import com.edu.bankapplication.web.auth.persistance.entity.ActivationToken;
 import com.edu.bankapplication.web.auth.persistance.repository.ActivationTokenRepository;
-import com.edu.bankapplication.web.auth.persistance.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,16 +35,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final TokenFactory<RefreshToken> refreshTokenFactory;
     private final TokenFactory<ActivationToken> activationTokenFactory;
 
-    private final CustomerService customerService;
-    private final EmployeeService employeeService;
     private final NotificationService notificationService;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     private final ActivationTokenRepository activationTokenRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final IdentityUserRepository identityUserRepository;
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
@@ -63,9 +57,6 @@ public class AuthServiceImpl implements AuthService {
     public CustomerResponse registerCustomer(RegisterCustomerRequest request) {
         if (request == null)
             throw new EmptyCreateUserRequestException();
-
-        if (identityUserRepository.existsByEmail(request.email()))
-            throw new UserAlreadyExistsException(request.email());
 
         var identityUser = identityUserDtoMapper.toIdentityUser(request);
         var customer = customerDtoMapper.toCustomer(request);
@@ -104,6 +95,7 @@ public class AuthServiceImpl implements AuthService {
         identityUser.setRole(Role.ADMIN);
 
         employee.setIdentityUser(identityUser);
+        employeeRepository.save(employee);
 
         TokenResult<ActivationToken> tokenResult = activationTokenFactory.create(identityUser);
         activationTokenRepository.save(tokenResult.tokenEntity());
@@ -114,10 +106,6 @@ public class AuthServiceImpl implements AuthService {
                         .build());
 
         return employeeDtoMapper.toEmployeeResponse(employee);
-    }
-
-    public void register(RegisterRequest request) {
-
     }
 
     @Override
@@ -140,15 +128,14 @@ public class AuthServiceImpl implements AuthService {
             throw new EmptyRefreshTokenException();
 
         String tokenHash = passwordEncoder.encode(refreshToken);
-        RefreshToken token = refreshTokenRepository.findByTokenHash(tokenHash)
-                .orElseThrow(() -> new RefreshTokenNotFoundException(refreshToken));
-
-        IdentityUser user = token.getUser();
+        IdentityUser user = refreshTokenService.findUserByRefreshTokenHash(tokenHash);
         String accessToken = jwtService.createAccessToken(user);
         return AccessTokenResponse.builder()
                 .accessToken(accessToken)
                 .build();
     }
+
+
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -166,11 +153,8 @@ public class AuthServiceImpl implements AuthService {
         if (!user.getPasswordHash().equals(passwordHash))
             throw new InvalidPasswordException();
 
-        TokenResult<RefreshToken> refreshTokenResult = refreshTokenFactory.create(user);
-        refreshTokenRepository.save(refreshTokenResult.tokenEntity());
-
+        String refreshToken = refreshTokenService.createRefreshToken(user);
         String accessToken = jwtService.createAccessToken(user);
-        String refreshToken = refreshTokenResult.token();
 
         return LoginResponse.builder()
                 .accessToken(accessToken)
