@@ -27,7 +27,8 @@ import java.util.Set;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customers_seq")
+    @SequenceGenerator(name = "customers_seq", sequenceName = "customers_seq", schema = "bank", allocationSize = 50)
     private Long id;
 
     @OneToOne(

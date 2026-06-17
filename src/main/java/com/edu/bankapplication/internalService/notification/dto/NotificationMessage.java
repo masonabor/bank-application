@@ -11,4 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NotificationMessage {
     private final String message;
+
+    @Override
+    public String toString() {
+        return "Notification message: " + message;
+    }
 }

@@ -3,17 +3,21 @@ spring:
     name: bank-aplication
 
   flyway:
+    enabled: true
     lock-retry-count: 10
+    locations: classpath:db/migration
     create-schemas: true
     schemas: bank
     default-schema: bank
-    enabled: true
     loggers: slf4j
+    baseline-on-migrate: true
+    baseline-version: 1
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
+    defer-datasource-initialization: false
 
   web:
     resources:

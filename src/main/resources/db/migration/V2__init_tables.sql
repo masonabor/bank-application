@@ -1,20 +1,6 @@
-CREATE SEQUENCE bank.accounts_seq START WITH 1 INCREMENT BY 50;
-
-CREATE SEQUENCE bank.address_infos_seq START WITH 1 INCREMENT BY 50;
-
-CREATE SEQUENCE bank.customers_seq START WITH 1 INCREMENT BY 50;
-
-CREATE SEQUENCE bank.employees_seq START WITH 1 INCREMENT BY 50;
-
-CREATE SEQUENCE bank.identity_users_seq START WITH 1 INCREMENT BY 50;
-
-CREATE SEQUENCE bank.postings_seq START WITH 1 INCREMENT BY 50;
-
-CREATE SEQUENCE bank.transfers_seq START WITH 1 INCREMENT BY 50;
-
 CREATE TABLE bank.accounts
 (
-    deleted_at  NUMBER(1)     NOT NULL,
+    deleted_at  TIMESTAMP,
     id          NUMBER(38, 0) NOT NULL,
     card_number VARCHAR2(255) NOT NULL,
     currency    VARCHAR2(255) NOT NULL,
@@ -52,7 +38,7 @@ CREATE TABLE bank.address_infos
 
 CREATE TABLE bank.customers
 (
-    deleted_at       NUMBER(1)     NOT NULL,
+    deleted_at       TIMESTAMP,
     id               NUMBER(38, 0) NOT NULL,
     identity_user_id NUMBER(38, 0) NOT NULL,
     first_name       VARCHAR2(255) NOT NULL,
@@ -79,7 +65,7 @@ CREATE TABLE bank.employees
 
 CREATE TABLE bank.identity_users
 (
-    deleted_at               NUMBER(1)     NOT NULL,
+    deleted_at               TIMESTAMP,
     id                       NUMBER(38, 0) NOT NULL,
     email                    VARCHAR2(255) NOT NULL,
     password_hash            VARCHAR2(255) NOT NULL,
@@ -95,7 +81,7 @@ CREATE TABLE bank.identity_users
 
 CREATE TABLE bank.postings
 (
-    deleted_at  NUMBER(1)     NOT NULL,
+    deleted_at  TIMESTAMP,
     id          NUMBER(38, 0) NOT NULL,
     account_id  NUMBER(38, 0) NOT NULL,
     type        VARCHAR2(255),
@@ -117,7 +103,7 @@ CREATE TABLE bank.refresh_tokens
 
 CREATE TABLE bank.transfers
 (
-    deleted_at          NUMBER(1)     NOT NULL,
+    deleted_at          TIMESTAMP,
     id                  NUMBER(38, 0) NOT NULL,
     from_number         VARCHAR2(255) NOT NULL,
     to_number           VARCHAR2(255) NOT NULL,

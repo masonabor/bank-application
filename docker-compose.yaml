@@ -10,6 +10,7 @@ services:
       - ORACLE_DB=${ORACLE_DB}
       - ORACLE_USER=${ORACLE_USER}
       - ORACLE_PASSWORD=${ORACLE_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
     depends_on:
       oracle-bank-db:
         condition: service_healthy
@@ -26,6 +27,7 @@ services:
     restart: always
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
+      - ../oradata:/opt/oracle/oradata
     environment:
       - ORACLE_PASSWORD=${ORACLE_ADMIN_PASSWORD}
       - ORACLE_ALLOW_REMOTE=true

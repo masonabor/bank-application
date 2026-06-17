@@ -64,11 +64,16 @@ public class AuthServiceImpl implements AuthService {
         if (request == null)
             throw new EmptyCreateUserRequestException();
 
+        if (identityUserRepository.existsByEmail(request.email()))
+            throw new UserAlreadyExistsException(request.email());
+
         var identityUser = identityUserDtoMapper.toIdentityUser(request);
         var customer = customerDtoMapper.toCustomer(request);
-        customer.setIdentityUser(identityUser);
+
+        identityUser.setPasswordHash(passwordEncoder.encode(request.password()));
         identityUser.setStatus(Status.INACTIVATED);
         identityUser.setRole(Role.CUSTOMER);
+        customer.setIdentityUser(identityUser);
         customerRepository.save(customer);
 
         TokenResult<ActivationToken> tokenResult = activationTokenFactory.create(identityUser);
@@ -88,12 +93,17 @@ public class AuthServiceImpl implements AuthService {
         if (request == null)
             throw new EmptyCreateUserRequestException();
 
+        if (identityUserRepository.existsByEmail(request.email()))
+            throw new UserAlreadyExistsException(request.email());
+
         var identityUser = identityUserDtoMapper.toIdentityUser(request);
         var employee = employeeDtoMapper.toEmployee(request);
-        employee.setIdentityUser(identityUser);
+
+        identityUser.setPasswordHash(passwordEncoder.encode(request.password()));
         identityUser.setStatus(Status.INACTIVATED);
         identityUser.setRole(Role.ADMIN);
-        employeeRepository.save(employee);
+
+        employee.setIdentityUser(identityUser);
 
         TokenResult<ActivationToken> tokenResult = activationTokenFactory.create(identityUser);
         activationTokenRepository.save(tokenResult.tokenEntity());
